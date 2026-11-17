@@ -1,0 +1,44 @@
+name: Build APK
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: Compilar APK
+        run: gradle assembleDebug --no-daemon -Dorg.gradle.jvmargs=-Xmx2g
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: teclado-ctrl-apk
+          path: build/outputs/apk/debug/*.apk
+
+      - name: Publicar na aba Releases
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete latest --cleanup-tag --yes --repo "$GITHUB_REPOSITORY" || true
+          gh release create latest build/outputs/apk/debug/*.apk \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Teclado Ctrl (último build)" \
+            --notes "Build do commit $GITHUB_SHA"
