@@ -2,12 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
-        android:label="Teclado Ctrl"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Teclado Top"
         android:allowBackup="false">
 
         <service
             android:name=".CtrlKeyboardService"
-            android:label="Teclado Ctrl"
+            android:label="Teclado Top"
             android:exported="true"
             android:permission="android.permission.BIND_INPUT_METHOD">
             <intent-filter>
@@ -20,7 +21,7 @@
 
         <activity
             android:name=".SetupActivity"
-            android:label="Teclado Ctrl"
+            android:label="Teclado Top"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
