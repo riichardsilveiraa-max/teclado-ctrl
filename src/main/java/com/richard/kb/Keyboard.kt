@@ -18,7 +18,6 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.util.TypedValue
 import android.view.Gravity
-import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -215,6 +214,7 @@ class CtrlKeyboardService : InputMethodService() {
         fun row(keys: List<K>) {
             val r = LinearLayout(this)
             r.orientation = LinearLayout.HORIZONTAL
+            r.isBaselineAligned = false
             for (k in keys) {
                 val lp = LinearLayout.LayoutParams(0, dp(KEY_H), k.weight)
                 lp.setMargins(dp(2), 0, dp(2), 0)
@@ -318,7 +318,7 @@ class CtrlKeyboardService : InputMethodService() {
     private fun spaceKey(weight: Float, style: Int = NORMAL) =
         K("espaço", style, weight, sp = 13f) { typeChar(" ") }
 
-    private fun enterKey() = K("↵", ACCENT, 1.5f, sp = 18f) { enter() }
+    private fun enterKey() = K("↵", ACCENT, 1.5f, sp = 32f) { enter() }
 
     private fun rounded(color: Int): GradientDrawable {
         val d = GradientDrawable()
@@ -367,7 +367,6 @@ class CtrlKeyboardService : InputMethodService() {
             when (e.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
                     v.isPressed = true
-                    v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                     if (k.preview) showBalao(v, k.label)
                     if (k.repeat) {
                         k.onTap()
