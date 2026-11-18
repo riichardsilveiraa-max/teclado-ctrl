@@ -9,9 +9,9 @@ android {
 
     defaultConfig {
         applicationId = "com.richard.kb"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
-        versionCode = 1
+        versionCode = (System.getenv("GITHUB_RUN_NUMBER") ?: "1").toInt()
         versionName = "1.0"
     }
 
